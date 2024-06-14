@@ -19,6 +19,11 @@ public class WaveFrontElement {
 
     V3 initCenter;
 
+    M3 I = new M3(1,0,0,
+            0,1,0,
+            0,0,1);
+
+
 
     WaveFrontElement(String src){
         points.add(new V3(0,0,0));
@@ -55,14 +60,7 @@ public class WaveFrontElement {
         fileScanner.close();
     }
 
-    void draw(Camera c, Graphics g){
-        for (int i = 0; i < faces.size(); i++) {
-            c.drawLine(g,points.get(faces.get(i).a),points.get(faces.get(i).b));
-            c.drawLine(g,points.get(faces.get(i).b),points.get(faces.get(i).c));
-            c.drawLine(g,points.get(faces.get(i).c),points.get(faces.get(i).a));
-        }
-    }
-    void drawW(Camera c, Graphics g, ArrayList<Face> facesB){
+    void drawPart(Camera c, Graphics g, ArrayList<Face> facesB){
         for (int i = 0; i < facesB.size(); i++) {
             c.drawLine(g,points.get(facesB.get(i).a),points.get(facesB.get(i).b));
             c.drawLine(g,points.get(facesB.get(i).b),points.get(facesB.get(i).c));
@@ -112,34 +110,9 @@ public class WaveFrontElement {
         }
     }
 
-    M3 I = new M3(1,0,0,
-            0,1,0,
-            0,0,1);
 
-    void rotate(V3 u){
-        double phi = Math.PI/100;
-        M3 Su =new M3 (0,-u.z,u.y,
-        u.z,0,-u.x,
-        -u.y,u.x,0);
-        M3 Ru = I.add(Su.mul(Math.sin(phi))).add(Su.mul(Su).mul(1-Math.cos(phi)));//rotations matrix
-//        System.out.println(Ru);
-        V3 center = center(points);
-        //V3 pos = new V3(10,5,2);
-        for (int i = 0; i < points.size(); i++) {
-            V3 hej = Ru.mul(points.get(i).sub(center)).add(center);
-            points.set(i,hej);
-        }
-    }
-    V3 rotate(V3 u, V3 vec){ //TODO TEST NOTE THIS IS FOR ROTATION ROTATION AXIS FOR HELI
-        double phi = Math.PI/100;
-        M3 Su =new M3 (0,-u.z,u.y,
-                u.z,0,-u.x,
-                -u.y,u.x,0);
-        M3 Ru = I.add(Su.mul(Math.sin(phi))).add(Su.mul(Su).mul(1-Math.cos(phi)));//rotations matrix
-        vec = Ru.mul(vec.sub(new V3(0,0,0)).add(new V3(0,0,0)));
-        return vec;
-    }
-    V3 rotate(V3 u, V3 vec, V3 bCenter){ //TODO TEST NOTE THIS IS FOR ROTATION ROTATION AXIS FOR HELI
+
+    V3 rotate(V3 u, V3 vec, V3 bCenter){
         double phi = Math.PI/100;
         M3 Su =new M3 (0,-u.z,u.y,
                 u.z,0,-u.x,
@@ -169,6 +142,37 @@ public class WaveFrontElement {
 //        new WaveFrontElement("").run();
 //    }
 
+//
+//    void draw(Camera c, Graphics g){
+//        for (int i = 0; i < faces.size(); i++) {
+//            c.drawLine(g,points.get(faces.get(i).a),points.get(faces.get(i).b));
+//            c.drawLine(g,points.get(faces.get(i).b),points.get(faces.get(i).c));
+//            c.drawLine(g,points.get(faces.get(i).c),points.get(faces.get(i).a));
+//        }
+//    }
+//V3 rotate(V3 u, V3 vec){
+//        double phi = Math.PI/100;
+//        M3 Su =new M3 (0,-u.z,u.y,
+//                u.z,0,-u.x,
+//                -u.y,u.x,0);
+//        M3 Ru = I.add(Su.mul(Math.sin(phi))).add(Su.mul(Su).mul(1-Math.cos(phi)));//rotations matrix
+//        vec = Ru.mul(vec.sub(new V3(0,0,0)).add(new V3(0,0,0)));
+//        return vec;
+//    }
 
+//    void rotate(V3 u){
+//        double phi = Math.PI/100;
+//        M3 Su =new M3 (0,-u.z,u.y,
+//        u.z,0,-u.x,
+//        -u.y,u.x,0);
+//        M3 Ru = I.add(Su.mul(Math.sin(phi))).add(Su.mul(Su).mul(1-Math.cos(phi)));//rotations matrix
+////        System.out.println(Ru);
+//        V3 center = center(points);
+//        //V3 pos = new V3(10,5,2);
+//        for (int i = 0; i < points.size(); i++) {
+//            V3 hej = Ru.mul(points.get(i).sub(center)).add(center);
+//            points.set(i,hej);
+//        }
+//    }
 
 }
